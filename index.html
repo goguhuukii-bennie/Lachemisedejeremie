@@ -7,17 +7,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700;900&display=swap');
-        
         body { font-family: 'Inter', sans-serif; background-color: #000; color: #fff; margin: 0; overflow-x: hidden; }
         h1 { font-family: 'Archivo Black', sans-serif; }
 
-        /* โลโก้เนียนไปกับพื้นหลัง */
         .logo-img { mix-blend-mode: screen; filter: drop-shadow(0 0 12px rgba(255,255,255,0.15)); }
-
         .product-card { border: 1px solid #111; background: #050505; transition: 0.3s ease; }
         .product-card:hover { border-color: #fff; }
 
-        /* ระบบเลื่อนรูปที่ลื่นไหล */
+        /* แก้ไขระบบเลื่อนรูปให้สมบูรณ์ */
         .image-scroll-container {
             display: flex;
             overflow-x: auto;
@@ -25,7 +22,10 @@
             -webkit-overflow-scrolling: touch;
             width: 100%;
             background: #000;
+            scrollbar-width: none; /* ซ่อน scrollbar ใน Firefox */
         }
+        .image-scroll-container::-webkit-scrollbar { display: none; } /* ซ่อน scrollbar ใน Chrome/Safari */
+        
         .image-scroll-container img {
             scroll-snap-align: center;
             flex-shrink: 0;
@@ -33,8 +33,6 @@
             height: auto;
             object-fit: contain;
         }
-        .image-scroll-container::-webkit-scrollbar { height: 2px; }
-        .image-scroll-container::-webkit-scrollbar-thumb { background: #444; }
 
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100; }
     </style>
@@ -45,45 +43,32 @@
         <div class="flex flex-col items-center">
             <img src="https://i.postimg.cc/RhY8CCdp/58A21F1E-8F91-40B0-AF8E-E40DB71B5611.png" alt="Logo" class="logo-img w-32 md:w-40 h-auto mb-6">
             <h1 class="text-4xl md:text-7xl leading-tight uppercase italic tracking-tighter mb-4">LACHEMISE<br class="md:hidden"> DEJEREMIE</h1>
-            <div class="text-[10px] tracking-[0.4em] text-gray-500 font-bold border-t border-gray-900 pt-4 uppercase">
-                Vintage / Exchange / Established 2026
-            </div>
+            <div class="text-[10px] tracking-[0.4em] text-gray-500 font-bold border-t border-gray-900 pt-4 uppercase">Vintage / Exchange / 2026</div>
         </div>
     </header>
 
-    <div id="catalog" class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-        <p class="col-span-full text-center py-20 text-gray-800 animate-pulse uppercase tracking-[0.3em]">Syncing Records...</p>
-    </div>
+    <div id="catalog" class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8"></div>
 
     <!-- Modal -->
     <div id="productModal" class="modal overflow-y-auto">
         <div class="min-h-screen flex items-center justify-center p-2 md:p-4">
             <div class="max-w-4xl w-full bg-[#050505] p-4 md:p-10 border border-gray-900 relative">
-                <button onclick="closeModal()" class="absolute top-2 right-4 text-4xl font-light z-50 text-white hover:text-red-500">&times;</button>
+                <button onclick="closeModal()" class="absolute top-2 right-4 text-4xl font-light z-50 text-white">&times;</button>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    
-                    <!-- ส่วนแสดงรูปภาพ -->
                     <div>
                         <div id="modalImageContainer" class="image-scroll-container border border-gray-900"></div>
-                        <div class="flex justify-between items-center mt-3">
-                            <span class="text-[9px] text-gray-600 uppercase tracking-widest">← Swipe to view</span>
-                            <span class="text-[9px] text-gray-600 uppercase tracking-widest">Lachemisedejeremie</span>
+                        <div class="flex justify-between items-center mt-3 text-[9px] text-gray-600 uppercase tracking-widest">
+                            <span>← Swipe to view photos →</span>
                         </div>
                     </div>
-                    
-                    <!-- ส่วนรายละเอียด -->
                     <div class="flex flex-col justify-center">
-                        <h2 id="modalTitle" class="text-2xl md:text-5xl font-black uppercase italic mb-4 leading-[0.9]"></h2>
+                        <h2 id="modalTitle" class="text-2xl md:text-4xl font-black uppercase italic mb-4 leading-tight"></h2>
                         <div id="modalPrice" class="text-3xl md:text-4xl font-black mb-8 border-b border-gray-900 pb-4"></div>
-                        
                         <div class="grid grid-cols-2 gap-6 text-[10px] uppercase mb-10">
-                            <div><span class="text-gray-600 block mb-2">Size</span><span id="modalSize" class="text-lg font-bold"></span></div>
-                            <div><span class="text-gray-600 block mb-2">Condition</span><span id="modalCond" class="text-lg font-bold"></span></div>
+                            <div><span class="text-gray-600 block mb-2">Size</span><span id="modalSize" class="text-base font-bold"></span></div>
+                            <div><span class="text-gray-600 block mb-2">Condition</span><span id="modalCond" class="text-base font-bold"></span></div>
                         </div>
-                        
-                        <a id="igShop" href="https://www.instagram.com/lachemisedejeremie" target="_blank" class="block w-full bg-white text-black py-5 text-center font-black uppercase text-sm hover:tracking-[0.2em] transition-all">
-                            Order via Shop
-                        </a>
+                        <a id="igShop" href="https://www.instagram.com/lachemisedejeremie" target="_blank" class="block w-full bg-white text-black py-5 text-center font-black uppercase text-sm hover:tracking-widest transition-all">Order via Shop</a>
                     </div>
                 </div>
             </div>
@@ -93,30 +78,41 @@
     <script>
         const SHEET_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqCLzpdL7cfalck0TGZOEWh-76coa84K0k-xqRRpntZHx0KXny_yxw0MH9WLxMVgba1_Qo1TTbYO18/pub?gid=0&single=true&output=csv";
 
+        // ฟังก์ชันแยก CSV แบบแม่นยำสูง (แก้ปัญหาชื่อเสื้อขาด)
+        function splitCSV(row) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            for (let i = 0; i < row.length; i++) {
+                const char = row[i];
+                if (char === '"' && row[i+1] === '"') { current += '"'; i++; }
+                else if (char === '"') { inQuotes = !inQuotes; }
+                else if (char === ',' && !inQuotes) { result.push(current); current = ''; }
+                else { current += char; }
+            }
+            result.push(current);
+            return result;
+        }
+
         async function loadProducts() {
             try {
                 const response = await fetch(SHEET_CSV);
                 const data = await response.text();
-                
-                // ใช้ Regex ขั้นสูงในการแยก CSV เพื่อป้องกันชื่อเสื้อหรือลิงก์ที่มีคอมม่าข้างในพัง
-                const rows = data.split(/\r?\n/).slice(1);
+                const lines = data.split(/\r?\n/).filter(line => line.trim() !== "");
                 const catalog = document.getElementById('catalog');
                 catalog.innerHTML = "";
 
-                rows.forEach(row => {
-                    const columns = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-                    if(!columns || columns.length < 5) return;
-
-                    // Clean ข้อมูลจากช่องว่างและอัญประกาศ
-                    const clean = (str) => str.replace(/^["\s]+|["\s]+$/g, '');
+                for (let i = 1; i < lines.length; i++) {
+                    const columns = splitCSV(lines[i]);
+                    if (columns.length < 5) continue;
 
                     const p = {
-                        title: clean(columns[0]),
-                        price: clean(columns[1]),
-                        size: clean(columns[2]),
-                        cond: clean(columns[3]),
-                        // แยกรูปภาพโดยรองรับทั้งคอมม่าและการขึ้นบรรทัดใหม่
-                        imgList: columns[4].replace(/"/g, '').split(/,|\s+/).map(u => u.trim()).filter(u => u.startsWith('http'))
+                        title: columns[0].trim(),
+                        price: columns[1].trim(),
+                        size: columns[2].trim(),
+                        cond: columns[3].trim(),
+                        // แยกลิงก์รูปภาพ รองรับทั้งช่องว่างและคอมม่า
+                        imgList: columns[4].replace(/[\r\n]+/g, ',').split(',').map(u => u.trim()).filter(u => u.startsWith('http'))
                     };
 
                     const card = document.createElement('div');
@@ -130,18 +126,17 @@
                         <p class="text-lg font-black italic px-1">฿${p.price}</p>
                     `;
                     catalog.appendChild(card);
-                });
-            } catch (e) { console.error("Load Error:", e); }
+                }
+            } catch (e) { console.error(e); }
         }
 
         function openModal(p) {
             document.getElementById('modalTitle').innerText = p.title;
-            document.getElementById('modalPrice').innerText = "฿" + p.price;
+            document.getElementById('modalPrice').innerText = p.price.includes('฿') ? p.price : "฿" + p.price;
             document.getElementById('modalSize').innerText = p.size;
             document.getElementById('modalCond').innerText = p.cond;
             
-            // Render รูปภาพทั้งหมด
-            const imgHtml = p.imgList.map(url => `<img src="${url}" alt="gallery">`).join('');
+            const imgHtml = p.imgList.map(url => `<img src="${url}" alt="item">`).join('');
             const container = document.getElementById('modalImageContainer');
             container.innerHTML = imgHtml;
             container.scrollLeft = 0; 
