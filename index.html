@@ -8,86 +8,82 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700;900&display=swap');
         
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #000; 
-            color: #fff;
-            margin: 0;
-        }
-
+        body { font-family: 'Inter', sans-serif; background-color: #000; color: #fff; margin: 0; overflow-x: hidden; }
         h1 { font-family: 'Archivo Black', sans-serif; }
 
-        /* จัดการเรื่องความเนียนของโลโก้ */
-        .logo-img {
-            mix-blend-mode: screen;
-            filter: drop-shadow(0 0 15px rgba(255,255,255,0.1));
-        }
+        /* โลโก้เนียนไปกับพื้นหลัง */
+        .logo-img { mix-blend-mode: screen; filter: drop-shadow(0 0 12px rgba(255,255,255,0.15)); }
 
-        .product-card {
-            border: 1px solid #1a1a1a;
-            background: #050505;
-            transition: 0.3s;
-        }
-        .product-card:hover { border-color: #444; }
+        .product-card { border: 1px solid #111; background: #050505; transition: 0.3s ease; }
+        .product-card:hover { border-color: #fff; }
 
-        /* ส่วนแสดงรูปภาพหลายรูปใน Modal */
+        /* ระบบเลื่อนรูปที่ลื่นไหล */
         .image-scroll-container {
             display: flex;
             overflow-x: auto;
             scroll-snap-type: x mandatory;
-            gap: 10px;
+            -webkit-overflow-scrolling: touch;
+            width: 100%;
+            background: #000;
         }
         .image-scroll-container img {
-            scroll-snap-align: start;
+            scroll-snap-align: center;
             flex-shrink: 0;
             width: 100%;
             height: auto;
-            border: 1px solid #1a1a1a;
+            object-fit: contain;
         }
-        /* ซ่อน Scrollbar เพื่อความคลีน */
-        .image-scroll-container::-webkit-scrollbar { display: none; }
+        .image-scroll-container::-webkit-scrollbar { height: 2px; }
+        .image-scroll-container::-webkit-scrollbar-thumb { background: #444; }
 
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.98);
-            z-index: 100;
-        }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100; }
     </style>
 </head>
 <body class="p-4 md:p-10">
 
     <header class="max-w-6xl mx-auto mb-16 text-center">
         <div class="flex flex-col items-center">
-            <img src="https://i.postimg.cc/RhY8CCdp/58A21F1E-8F91-40B0-AF8E-E40DB71B5611.png" alt="Logo" class="logo-img w-28 md:w-36 h-auto mb-8">
-            <h1 class="text-4xl md:text-6xl leading-tight uppercase italic tracking-tighter mb-4">LACHEMISE<br class="md:hidden"> DEJEREMIE</h1>
-            <p class="text-[9px] tracking-[0.5em] text-gray-500 uppercase font-bold mb-8">Vintage & Exchange / BKK</p>
-            <div class="border border-gray-800 text-gray-400 px-6 py-2 text-[10px] font-bold uppercase inline-block">📍 Bangkok University Free Shipping</div>
+            <img src="https://i.postimg.cc/RhY8CCdp/58A21F1E-8F91-40B0-AF8E-E40DB71B5611.png" alt="Logo" class="logo-img w-32 md:w-40 h-auto mb-6">
+            <h1 class="text-4xl md:text-7xl leading-tight uppercase italic tracking-tighter mb-4">LACHEMISE<br class="md:hidden"> DEJEREMIE</h1>
+            <div class="text-[10px] tracking-[0.4em] text-gray-500 font-bold border-t border-gray-900 pt-4 uppercase">
+                Vintage / Exchange / Established 2026
+            </div>
         </div>
     </header>
 
-    <div id="catalog" class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8"></div>
+    <div id="catalog" class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+        <p class="col-span-full text-center py-20 text-gray-800 animate-pulse uppercase tracking-[0.3em]">Syncing Records...</p>
+    </div>
 
-    <!-- Product Modal -->
+    <!-- Modal -->
     <div id="productModal" class="modal overflow-y-auto">
-        <div class="min-h-screen flex items-center justify-center p-4">
-            <div class="max-w-4xl w-full bg-[#050505] p-6 border border-gray-900 relative">
-                <button onclick="closeModal()" class="absolute top-4 right-4 text-3xl font-light z-10">&times;</button>
+        <div class="min-h-screen flex items-center justify-center p-2 md:p-4">
+            <div class="max-w-4xl w-full bg-[#050505] p-4 md:p-10 border border-gray-900 relative">
+                <button onclick="closeModal()" class="absolute top-2 right-4 text-4xl font-light z-50 text-white hover:text-red-500">&times;</button>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- ส่วนแสดงรูป (รองรับ Slide/Scroll) -->
-                    <div id="modalImageContainer" class="image-scroll-container"></div>
                     
-                    <div class="flex flex-col justify-center">
-                        <h2 id="modalTitle" class="text-3xl font-black uppercase italic mb-2"></h2>
-                        <div id="modalPrice" class="text-4xl font-black mb-6"></div>
-                        <p class="text-[10px] text-gray-500 mb-6 uppercase tracking-widest">← Swipe to see more photos</p>
-                        
-                        <div class="grid grid-cols-2 gap-4 text-[10px] uppercase border-t border-gray-900 pt-6 mb-8">
-                            <div><span class="text-gray-600 block mb-1">Size</span><span id="modalSize" class="text-base font-bold"></span></div>
-                            <div><span class="text-gray-600 block mb-1">Condition</span><span id="modalCond" class="text-base font-bold"></span></div>
+                    <!-- ส่วนแสดงรูปภาพ -->
+                    <div>
+                        <div id="modalImageContainer" class="image-scroll-container border border-gray-900"></div>
+                        <div class="flex justify-between items-center mt-3">
+                            <span class="text-[9px] text-gray-600 uppercase tracking-widest">← Swipe to view</span>
+                            <span class="text-[9px] text-gray-600 uppercase tracking-widest">Lachemisedejeremie</span>
                         </div>
-                        <a id="igShop" href="https://www.instagram.com/lachemisedejeremie" target="_blank" class="block w-full bg-white text-black py-4 text-center font-bold uppercase hover:bg-gray-200">Shop on Instagram</a>
+                    </div>
+                    
+                    <!-- ส่วนรายละเอียด -->
+                    <div class="flex flex-col justify-center">
+                        <h2 id="modalTitle" class="text-2xl md:text-5xl font-black uppercase italic mb-4 leading-[0.9]"></h2>
+                        <div id="modalPrice" class="text-3xl md:text-4xl font-black mb-8 border-b border-gray-900 pb-4"></div>
+                        
+                        <div class="grid grid-cols-2 gap-6 text-[10px] uppercase mb-10">
+                            <div><span class="text-gray-600 block mb-2">Size</span><span id="modalSize" class="text-lg font-bold"></span></div>
+                            <div><span class="text-gray-600 block mb-2">Condition</span><span id="modalCond" class="text-lg font-bold"></span></div>
+                        </div>
+                        
+                        <a id="igShop" href="https://www.instagram.com/lachemisedejeremie" target="_blank" class="block w-full bg-white text-black py-5 text-center font-black uppercase text-sm hover:tracking-[0.2em] transition-all">
+                            Order via Shop
+                        </a>
                     </div>
                 </div>
             </div>
@@ -101,37 +97,41 @@
             try {
                 const response = await fetch(SHEET_CSV);
                 const data = await response.text();
-                const rows = data.split('\n').slice(1);
+                
+                // ใช้ Regex ขั้นสูงในการแยก CSV เพื่อป้องกันชื่อเสื้อหรือลิงก์ที่มีคอมม่าข้างในพัง
+                const rows = data.split(/\r?\n/).slice(1);
                 const catalog = document.getElementById('catalog');
                 catalog.innerHTML = "";
 
                 rows.forEach(row => {
-                    // ปรับการตัดคำให้รองรับคอมม่าข้างในลิงก์ (ถ้ามี) โดยใช้ Regex เบื้องต้น
                     const columns = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
                     if(!columns || columns.length < 5) return;
 
-                    const title = columns[0].replace(/"/g, "");
-                    const price = columns[1].replace(/"/g, "");
-                    const size = columns[2].replace(/"/g, "");
-                    const cond = columns[3].replace(/"/g, "");
-                    
-                    // จัดการลิงก์รูปหลายลิงก์ (แยกด้วยคอมม่า)
-                    const rawImgs = columns[4].replace(/"/g, "").split(',');
-                    const imgList = rawImgs.map(url => url.trim()).filter(url => url !== "");
+                    // Clean ข้อมูลจากช่องว่างและอัญประกาศ
+                    const clean = (str) => str.replace(/^["\s]+|["\s]+$/g, '');
+
+                    const p = {
+                        title: clean(columns[0]),
+                        price: clean(columns[1]),
+                        size: clean(columns[2]),
+                        cond: clean(columns[3]),
+                        // แยกรูปภาพโดยรองรับทั้งคอมม่าและการขึ้นบรรทัดใหม่
+                        imgList: columns[4].replace(/"/g, '').split(/,|\s+/).map(u => u.trim()).filter(u => u.startsWith('http'))
+                    };
 
                     const card = document.createElement('div');
-                    card.className = "product-card p-2 cursor-pointer";
-                    card.onclick = () => openModal({title, price, size, cond, imgList});
+                    card.className = "product-card p-2 cursor-pointer group";
+                    card.onclick = () => openModal(p);
                     card.innerHTML = `
-                        <div class="aspect-[3/4] overflow-hidden mb-3 bg-black">
-                            <img src="${imgList[0]}" class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity">
+                        <div class="aspect-[3/4] overflow-hidden mb-3 bg-[#111]">
+                            <img src="${p.imgList[0]}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
                         </div>
-                        <h3 class="text-[9px] font-bold text-gray-500 uppercase truncate px-1">${title}</h3>
-                        <p class="text-base font-black italic px-1">฿${price}</p>
+                        <h3 class="text-[9px] font-bold text-gray-500 uppercase truncate px-1">${p.title}</h3>
+                        <p class="text-lg font-black italic px-1">฿${p.price}</p>
                     `;
                     catalog.appendChild(card);
                 });
-            } catch (e) { console.error(e); }
+            } catch (e) { console.error("Load Error:", e); }
         }
 
         function openModal(p) {
@@ -140,9 +140,11 @@
             document.getElementById('modalSize').innerText = p.size;
             document.getElementById('modalCond').innerText = p.cond;
             
-            // สร้างรูปทั้งหมดลงใน Container
-            const imgHtml = p.imgList.map(url => `<img src="${url}" alt="product">`).join('');
-            document.getElementById('modalImageContainer').innerHTML = imgHtml;
+            // Render รูปภาพทั้งหมด
+            const imgHtml = p.imgList.map(url => `<img src="${url}" alt="gallery">`).join('');
+            const container = document.getElementById('modalImageContainer');
+            container.innerHTML = imgHtml;
+            container.scrollLeft = 0; 
             
             document.getElementById('productModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
