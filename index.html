@@ -7,14 +7,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700;900&display=swap');
+        
         body { font-family: 'Inter', sans-serif; background-color: #000; color: #fff; margin: 0; overflow-x: hidden; }
         h1 { font-family: 'Archivo Black', sans-serif; }
 
+        /* โลโก้เนียนไปกับพื้นหลัง */
         .logo-img { mix-blend-mode: screen; filter: drop-shadow(0 0 12px rgba(255,255,255,0.15)); }
+
         .product-card { border: 1px solid #111; background: #050505; transition: 0.3s ease; }
         .product-card:hover { border-color: #fff; }
 
-        /* แก้ไขระบบเลื่อนรูปให้สมบูรณ์ */
+        /* ระบบเลื่อนรูปภาพ */
         .image-scroll-container {
             display: flex;
             overflow-x: auto;
@@ -22,10 +25,9 @@
             -webkit-overflow-scrolling: touch;
             width: 100%;
             background: #000;
-            scrollbar-width: none; /* ซ่อน scrollbar ใน Firefox */
+            scrollbar-width: none;
         }
-        .image-scroll-container::-webkit-scrollbar { display: none; } /* ซ่อน scrollbar ใน Chrome/Safari */
-        
+        .image-scroll-container::-webkit-scrollbar { display: none; }
         .image-scroll-container img {
             scroll-snap-align: center;
             flex-shrink: 0;
@@ -35,21 +37,50 @@
         }
 
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100; }
+        
+        /* ปุ่ม Contact แนว Minimal */
+        .contact-btn {
+            display: flex;
+            items-center: center;
+            gap: 10px;
+            border: 1px solid #1a1a1a;
+            padding: 8px 20px;
+            transition: 0.4s;
+        }
+        .contact-btn:hover { border-color: #fff; background: #fff; color: #000; }
+        .contact-btn img { width: 16px; height: 16px; transition: 0.4s; }
+        .contact-btn:hover img { filter: invert(1); }
     </style>
 </head>
 <body class="p-4 md:p-10">
 
-    <header class="max-w-6xl mx-auto mb-16 text-center">
+    <header class="max-w-6xl mx-auto mb-10 text-center">
         <div class="flex flex-col items-center">
             <img src="https://i.postimg.cc/RhY8CCdp/58A21F1E-8F91-40B0-AF8E-E40DB71B5611.png" alt="Logo" class="logo-img w-32 md:w-40 h-auto mb-6">
             <h1 class="text-4xl md:text-7xl leading-tight uppercase italic tracking-tighter mb-4">LACHEMISE<br class="md:hidden"> DEJEREMIE</h1>
-            <div class="text-[10px] tracking-[0.4em] text-gray-500 font-bold border-t border-gray-900 pt-4 uppercase">Vintage / Exchange / 2026</div>
+            <div class="text-[10px] tracking-[0.4em] text-gray-500 font-bold border-t border-gray-900 pt-4 uppercase mb-8">
+                Vintage / Exchange / BKK
+            </div>
+            
+            <!-- Contact Section ตามที่คุณสั่ง -->
+            <div class="flex justify-center gap-4">
+                <a href="https://www.instagram.com/lachemisedejeremie" target="_blank" class="contact-btn">
+                    <img src="https://www.edigitalagency.com.au/wp-content/uploads/new-Instagram-logo-white-glyph.png" alt="IG">
+                    <span class="text-[11px] font-black uppercase tracking-widest">Instagram</span>
+                </a>
+                <a href="https://line.me/ti/p/YOUR_ID" target="_blank" class="contact-btn">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" alt="Line" style="filter: invert(1);">
+                    <span class="text-[11px] font-black uppercase tracking-widest">Line Shop</span>
+                </a>
+            </div>
         </div>
     </header>
 
-    <div id="catalog" class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8"></div>
+    <div id="catalog" class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+        <!-- ข้อมูลสินค้าจะโหลดที่นี่ -->
+    </div>
 
-    <!-- Modal -->
+    <!-- Modal รายละเอียดสินค้า -->
     <div id="productModal" class="modal overflow-y-auto">
         <div class="min-h-screen flex items-center justify-center p-2 md:p-4">
             <div class="max-w-4xl w-full bg-[#050505] p-4 md:p-10 border border-gray-900 relative">
@@ -62,11 +93,11 @@
                         </div>
                     </div>
                     <div class="flex flex-col justify-center">
-                        <h2 id="modalTitle" class="text-2xl md:text-4xl font-black uppercase italic mb-4 leading-tight"></h2>
+                        <h2 id="modalTitle" class="text-2xl md:text-5xl font-black uppercase italic mb-4 leading-tight"></h2>
                         <div id="modalPrice" class="text-3xl md:text-4xl font-black mb-8 border-b border-gray-900 pb-4"></div>
                         <div class="grid grid-cols-2 gap-6 text-[10px] uppercase mb-10">
-                            <div><span class="text-gray-600 block mb-2">Size</span><span id="modalSize" class="text-base font-bold"></span></div>
-                            <div><span class="text-gray-600 block mb-2">Condition</span><span id="modalCond" class="text-base font-bold"></span></div>
+                            <div><span class="text-gray-600 block mb-2">Size</span><span id="modalSize" class="text-lg font-bold"></span></div>
+                            <div><span class="text-gray-600 block mb-2">Condition</span><span id="modalCond" class="text-lg font-bold"></span></div>
                         </div>
                         <a id="igShop" href="https://www.instagram.com/lachemisedejeremie" target="_blank" class="block w-full bg-white text-black py-5 text-center font-black uppercase text-sm hover:tracking-widest transition-all">Order via Shop</a>
                     </div>
@@ -78,7 +109,7 @@
     <script>
         const SHEET_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqCLzpdL7cfalck0TGZOEWh-76coa84K0k-xqRRpntZHx0KXny_yxw0MH9WLxMVgba1_Qo1TTbYO18/pub?gid=0&single=true&output=csv";
 
-        // ฟังก์ชันแยก CSV แบบแม่นยำสูง (แก้ปัญหาชื่อเสื้อขาด)
+        // ฟังก์ชันแยก CSV แบบแม่นยำสูง
         function splitCSV(row) {
             const result = [];
             let current = '';
@@ -102,31 +133,46 @@
                 const catalog = document.getElementById('catalog');
                 catalog.innerHTML = "";
 
+                let productList = [];
                 for (let i = 1; i < lines.length; i++) {
                     const columns = splitCSV(lines[i]);
                     if (columns.length < 5) continue;
 
-                    const p = {
-                        title: columns[0].trim(),
-                        price: columns[1].trim(),
-                        size: columns[2].trim(),
-                        cond: columns[3].trim(),
-                        // แยกลิงก์รูปภาพ รองรับทั้งช่องว่างและคอมม่า
-                        imgList: columns[4].replace(/[\r\n]+/g, ',').split(',').map(u => u.trim()).filter(u => u.startsWith('http'))
-                    };
+                    const clean = (str) => str ? str.replace(/^["\s]+|["\s]+$/g, '').trim() : "";
+                    
+                    productList.push({
+                        title: clean(columns[0]),
+                        price: clean(columns[1]),
+                        size: clean(columns[2]),
+                        cond: clean(columns[3]),
+                        imgList: columns[4].replace(/"/g, '').split(/,|\s+/).map(u => u.trim()).filter(u => u.startsWith('http')),
+                        status: clean(columns[5]).toLowerCase()
+                    });
+                }
 
+                // ดันสินค้า Available ไว้บน / Sold Out ไว้ล่าง
+                productList.sort((a, b) => {
+                    if (a.status === 'sold out' && b.status !== 'sold out') return 1;
+                    if (a.status !== 'sold out' && b.status === 'sold out') return -1;
+                    return 0;
+                });
+
+                productList.forEach(p => {
+                    const isSoldOut = p.status === 'sold out';
                     const card = document.createElement('div');
-                    card.className = "product-card p-2 cursor-pointer group";
-                    card.onclick = () => openModal(p);
+                    card.className = `product-card p-2 ${isSoldOut ? 'opacity-40 cursor-default' : 'cursor-pointer group'}`;
+                    if (!isSoldOut) card.onclick = () => openModal(p);
+
                     card.innerHTML = `
-                        <div class="aspect-[3/4] overflow-hidden mb-3 bg-[#111]">
-                            <img src="${p.imgList[0]}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                        <div class="aspect-[3/4] overflow-hidden mb-3 bg-[#111] relative">
+                            ${isSoldOut ? '<div class="absolute inset-0 flex items-center justify-center z-10"><span class="bg-red-600 text-white text-[10px] font-black px-3 py-1 uppercase shadow-xl">SOLD OUT</span></div>' : ''}
+                            <img src="${p.imgList[0]}" class="w-full h-full object-cover ${!isSoldOut ? 'grayscale group-hover:grayscale-0' : ''} transition-all duration-500">
                         </div>
                         <h3 class="text-[9px] font-bold text-gray-500 uppercase truncate px-1">${p.title}</h3>
-                        <p class="text-lg font-black italic px-1">฿${p.price}</p>
+                        <p class="text-lg font-black italic px-1">${isSoldOut ? '---' : '฿' + p.price}</p>
                     `;
                     catalog.appendChild(card);
-                }
+                });
             } catch (e) { console.error(e); }
         }
 
@@ -135,12 +181,10 @@
             document.getElementById('modalPrice').innerText = p.price.includes('฿') ? p.price : "฿" + p.price;
             document.getElementById('modalSize').innerText = p.size;
             document.getElementById('modalCond').innerText = p.cond;
-            
             const imgHtml = p.imgList.map(url => `<img src="${url}" alt="item">`).join('');
             const container = document.getElementById('modalImageContainer');
             container.innerHTML = imgHtml;
             container.scrollLeft = 0; 
-            
             document.getElementById('productModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
         }
